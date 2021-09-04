@@ -1,0 +1,30 @@
+1-MTU example
+
+#include<PingEX.au3>
+$ip="8.8.8.8"
+$timeout=200
+$ttl=200
+$dontfragment=true
+
+for $packetsize=1500 to 1480 step -1
+    $packetheader=28
+    $result=_ping($ip,$timeout,$ttl,$dontfragment,$packetsize-$packetheader)
+    if $result>0 Then
+    ConsoleWrite("Max allowed packet size without fragmentation is : "&$packetsize &@crlf)
+    ExitLoop
+    endif
+next
+
+2- Multi threading ping:-
+ 
+
+#include<PingEX.au3>
+$codeperformance=TimerInit()
+global $IP_list[5]=["192.168.1.1","10.0.0.1","www.google.com","Wrongdomain","192.168.1.1.1.1.1"]
+$timeout=1000
+$result=_ping($IP_list,$timeout)
+
+for $i=0 to UBound($IP_list)-1
+    ConsoleWrite("Pinging "&$IP_list[$i]&" :Result is = "&$result[$i]&@CRLF)
+next
+ConsoleWrite("Code executed in : "&TimerDiff($codeperformance)&@CRLF)
